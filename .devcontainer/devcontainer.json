@@ -29,13 +29,7 @@
 				"vscjava.vscode-java-dependency"
 			]
 		},
-		"codespaces": {
-     			"repositories": {
-        		"my_org/my_repo": {
-         		"permissions": "write-all"
-			}
-			}
-		}
+		
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
