@@ -89,7 +89,17 @@ public class Picture extends SimplePicture
 	flip all the colors:  if color had red = 30, green = 100, blue = 200
 	negated color red = 225, green= 155, blue = 55  */
 	public void negate() {
-		
+		Pixel[][] pixels = this.getPixels2D();
+		// Pixel[][] pixels = this.getPixels2D();     
+		Pixel pixel = null;     
+		for (int row = 0; row < pixels.length; row++) {       
+			for (int col = 0; col < pixels[0].length; col++) {        
+				pixel = pixels[row][col];         
+				pixel.setRed(255-pixel.getRed());         
+				pixel.setGreen(255-pixel.getGreen());
+				pixel.setBlue(255-pixel.getBlue());
+			}     
+		}  
 		
 	}
 	
@@ -98,7 +108,38 @@ public class Picture extends SimplePicture
 	   and blue components and set each component to that average
 	*/
 	public void grayScale() {
-		
+		Pixel[][] pixels = this.getPixels2D();
+
+		// Pixel[][] pixels = this.getPixels2D();     
+		Pixel pixel = null;     
+		for (int row = 0; row < pixels.length; row++)     
+		{       for (int col = 0; col < pixels[0].length; col++)       
+			{        
+				pixel = pixels[row][col];
+				int mean = (pixel.getBlue()+pixel.getRed()+pixel.getGreen())/3;     
+				pixel.setRed(mean);
+				pixel.setGreen(mean);
+				pixel.setBlue(mean);
+			}     
+		}  
+	}
+	public void monoChrome() {
+		Pixel[][] pixels = this.getPixels2D();  
+		Pixel pixel = null;     
+		for (int row = 0; row < pixels.length; row++) {
+			for (int col = 0; col < pixels[0].length; col++) {
+				pixel = pixels[row][col];
+				int mean = (pixel.getBlue()+pixel.getRed()+pixel.getGreen())/3;
+				if(mean > 127.5) {
+					mean = 255;
+				} else {
+					mean = 0;
+				}
+				pixel.setRed(mean);
+				pixel.setGreen(mean);
+				pixel.setBlue(mean);
+			}     
+		}  
 	}
 
   /** pixelates an image
@@ -124,6 +165,29 @@ public class Picture extends SimplePicture
 			}     
 		}  
 	}
+	public void keepOnlyGreen() {
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel pixel = null;     
+		for (int row = 0; row < pixels.length; row++) {       
+			for (int col = 0; col < pixels[0].length; col++) {        
+				pixel = pixels[row][col];
+				pixel.setRed(0);
+				pixel.setBlue(0);
+			}     
+		}  
+	}
+	public void keepOnlyRed() {
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel pixel = null;
+		for (int row = 0; row < pixels.length; row++) {       
+			for (int col = 0; col < pixels[0].length; col++) {        
+				pixel = pixels[row][col];
+				pixel.setGreen(0);
+				pixel.setBlue(0);
+			}     
+		}  
+	}
+
 	
 	
 	/** Method that mirrors the picture around horizontal line that passes
@@ -210,6 +274,21 @@ public class Picture extends SimplePicture
 		Pixel[][] pixels = this.getPixels2D();// gets the 2D array of Pixel
 		// Big hint, the Pixel class has a method called colorDistance(Color) which
 		// returns the distance the input Color is from this Pixel's Color
+		for(int r = 0; r < pixels.length; r++) {
+			for(int c = 1; c < pixels[r].length; c++) {
+				rightPixel = pixels[r][c];
+				leftPixel = pixels[r][c-1];
+				if(leftPixel.getAverage() - rightPixel.getAverage() > edgeDist) {
+					leftPixel.setGreen(0);
+					leftPixel.setBlue(0);
+					leftPixel.setRed(0);
+				} else {
+					leftPixel.setGreen(255);
+					leftPixel.setBlue(255);
+					leftPixel.setRed(255);
+				}
+			}
+		}
 
 	}
 
@@ -222,7 +301,64 @@ public class Picture extends SimplePicture
 		PictureTester.main(args);
 	}
 
+	public void setRedToHalfValueInTopHalf() {
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel pixel = null;
+		for (int row = 0; row < pixels.length/2; row++) {       
+			for (int col = 0; col < pixels[0].length; col++) {        
+				pixel = pixels[row][col];
+				pixel.setRed(pixel.getRed()/2);
+			}     
+		}
+	}
+
+	public void clearBlueOverValue(int val) {
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel pixel = null;
+		for (int row = 0; row < pixels.length; row++) {       
+			for (int col = 0; col < pixels[0].length; col++) {        
+				pixel = pixels[row][col];
+				if(pixel.getBlue() > val) {
+					pixel.setBlue(0);
+				}
+			}     
+		}
+	}
+
+	public void exaggerate() {
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel pixel = null;
+		int thres = (int)(255/2.5);
+		for (int row = 0; row < pixels.length; row++) {       
+			for (int col = 0; col < pixels[0].length; col++) {        
+				pixel = pixels[row][col];
+				pixel.setRed(pixel.getRed() > thres ? 255 : 0);
+				pixel.setBlue(pixel.getBlue() > thres ? 255 : 0);
+				pixel.setGreen(pixel.getGreen() > thres ? 255 : 0);
+			}
+		}
+	}
+
+	public void randomRed() {
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel pixel = null;
+		for (int row = 0; row < pixels.length; row++) {       
+			for (int col = 0; col < pixels[0].length; col++) {        
+				pixel = pixels[row][col];
+				pixel.setRed((int)(Math.random() * 255));
+			}
+		}
+	}
 	
-	
+	public void gradient() {
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel pixel = null;
+		for (int row = 0; row < pixels.length; row++) {       
+			for (int col = 0; col < pixels[0].length; col++) {        
+				pixel = pixels[row][col];
+				pixel.setRed(row);
+			}
+		}
+	}
 
 } // this } is the end of class Picture, put all new methods before this

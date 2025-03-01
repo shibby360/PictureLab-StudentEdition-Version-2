@@ -23,11 +23,12 @@ public class PictureTester {
 		 * 
 		 */
 		 // testZeroBlue();
-		testKeepOnlyBlue();
+		// testKeepOnlyBlue();
 		// testKeepOnlyRed();
 		// testKeepOnlyGreen();
 		// testNegate();
 		// testGrayscale();
+		// testMonoChrome();
 		// testEdgeDetection();
 		// testFaceDetect();
 		// testFixUnderwater();
@@ -44,10 +45,14 @@ public class PictureTester {
 		// testGetCountRedOverValue(250);
 		// testSetRedToHalfValueInTopHalf();
 		// testClearBlueOverValue(200);
-		// Color avgColor = testGetAverageForColumn(pic, col);// specified column
+		// Color avgColor = testGetAverageForColumn(new Picture("selfie.jpg"), 7);// specified column
 		// testDiagonal();
 		// testQuads();
 		// testPixelate();
+
+		// testExag();
+		// testRandred();
+		testGradient();
 	}
 
 	private static void testPixelate() {
@@ -119,13 +124,27 @@ public class PictureTester {
 	}
 
 	private static void testKeepOnlyGreen() {
-		// pretty obvious...
-
+		Picture beach = new Picture("beach.jpg");// You would change the var name and file name to your picture when you are testing your image.
+    Picture sBeach = beach.scale(0.5,0.5);// scales the size down if you need to resize.
+    sBeach.write("sBeach.jpg");
+    //Code below is necessary to make your image smaller if you took it from your camera.
+  
+    
+		sBeach.explore();// shows the picture in a window
+		sBeach.keepOnlyGreen();// Calls your keep only blue method
+		sBeach.explore();//shows a new picture with only blue hues
 	}
 
 	private static void testKeepOnlyRed() {
-		// turns the pic quite red
-
+		Picture beach = new Picture("beach.jpg");// You would change the var name and file name to your picture when you are testing your image.
+    Picture sBeach = beach.scale(0.5,0.5);// scales the size down if you need to resize.
+    sBeach.write("sBeach.jpg");
+    //Code below is necessary to make your image smaller if you took it from your camera.
+  
+    
+		sBeach.explore();// shows the picture in a window
+		sBeach.keepOnlyRed();// Calls your keep only blue method
+		sBeach.explore();//shows a new picture with only blue hues
 	}
 
 	/**
@@ -134,7 +153,8 @@ public class PictureTester {
 	 * used often, we can write these algorithms in this class.
 	 */
 	private static void testNegate() {
-		Picture swan = new Picture("swan.jpg");
+		Picture swan = new Picture("selfie.jpg");
+		swan = swan.scale(0.5,0.5);
 		// write this in Picture class
 		swan.negate();
 		swan.explore();
@@ -146,20 +166,29 @@ public class PictureTester {
 	 * to the Picture class.
 	 */
 	private static void testGrayscale() {
-		Picture swan = new Picture("swan.jpg");
+		Picture swan = new Picture("selfie.jpg");
+		swan = swan.scale(0.5,0.5);
 		// write this method in Picture class
 		swan.grayScale();
 		swan.explore();
 
 	}
+	public static void testMonoChrome() {
+		Picture beach = new Picture("selfie.jpg");
+		beach = beach.scale(0.5,0.5);
+		// write this method in Picture class
+		beach.monoChrome();
+		beach.explore();
+	}
 
 	/** Method to test edgeDetection */
 	public static void testEdgeDetection() {
 
-		Picture swan = new Picture("swan.jpg");
+		Picture swan = new Picture("selfie.jpg");
+		swan = swan.scale(0.5, 0.5);
 
 		// written in Picture class
-		swan.edgeDetection(10);// bigger number means fewer edges
+		swan.edgeDetection(1);// bigger number means fewer edges
 		swan.explore();
 		swan.write("swan outline.jpg");// writes the new picture to a new file
 	}
@@ -224,23 +253,63 @@ public class PictureTester {
 	// So, you can create a Picture Object and find the average value of
 	// the component in that column
 	private static Color testGetAverageForColumn(Picture pic, int col) {
-		Color avg = null;
-
-		return avg;
+		int red = 0;
+		int green = 0;
+		int blue = 0;
+		Pixel[][] pixels = pic.getPixels2D();
+		for(int r = 0; r < pixels.length; r++) {
+			red += pixels[r][col].getRed();
+			blue += pixels[r][col].getBlue();
+			green += pixels[r][col].getGreen();
+		}
+		return new Color(red/pic.getHeight(), blue/pic.getHeight(), green/pic.getHeight());
 	}
 
 	// so for this one, any pixels that have blue over a certain value are set
 	// to no blue at all. Or for a different effect, have those pixels set to black.
 	private static void testClearBlueOverValue(int i) {
+		Picture swan = new Picture("selfie.jpg");
+		swan = swan.scale(0.5, 0.5);
 
+		// written in Picture class
+		swan.clearBlueOverValue(i);// bigger number means fewer edges
+		swan.explore();
+		swan.write("newselife.jpg");// writes the new picture to a new file
 	}
 
 	// goes to each pixel in the top half and cuts the red component in half
 	// So, bottom half of pic should look normal
 	private static void testSetRedToHalfValueInTopHalf() {
+		Picture swan = new Picture("selfie.jpg");
+		swan = swan.scale(0.5, 0.5);
 
+		// written in Picture class
+		swan.setRedToHalfValueInTopHalf();// bigger number means fewer edges
+		swan.explore();
+		swan.write("newselife.jpg");// writes the new picture to a new file
 	}
 
+	public static void testExag() {
+		Picture pic = new Picture("selfie.jpg");
+		pic = pic.scale(0.5, 0.5);
+		pic.exaggerate();
+		pic.explore();
+	}
+
+	public static void testRandred() {
+		Picture pic = new Picture("selfie.jpg");
+		pic = pic.scale(0.5, 0.5);
+		pic.randomRed();
+		pic.explore();
+	}
+
+	public static void testGradient() {
+		Picture pic = new Picture("selfie.jpg");
+		pic = pic.scale(0.5, 0.5);
+		pic.gradient();
+		pic.explore();
+	}
+	
 	// displays the number of pixels in the pic that have a red component
 	// greater than the specifies int.
 	private static void testGetCountRedOverValue(int i) {
@@ -364,6 +433,7 @@ public class PictureTester {
 	 */
 	private static void testFixUnderwater() {
 		Picture pic = new Picture("water.jpg");
+		// pic.fixUnderwater();
 		pic.explore();
 	}
 
